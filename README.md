@@ -1,2 +1,2 @@
 # Taller2_Arquisoft
-Sistema monolitico por capas de una aplicacion de reserva de un hotel basado en Java
+Sistema monolitico por capas de una aplicacion para reservas en un hotel basado en Java usando Jakarta, JSF y MariaDB
