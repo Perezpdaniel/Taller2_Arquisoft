@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" 
+"http://www.glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<resources>
+    <!-- MariaDB Connection Pool -->
+    <jdbc-connection-pool name="HotelReservasPool" 
+                         res-type="javax.sql.DataSource"
+                         datasource-classname="org.mariadb.jdbc.MariaDbDataSource"
+                         is-isolation-guaranteed="false"
+                         max-pool-size="20"
+                         res-adapter="jdbc"
+                         non-transactional-connections="false">
+        <property name="URL" value="jdbc:mariadb://mariadb:3306/hotel_reservas"/>
+        <property name="User" value="hotel_user"/>
+        <property name="Password" value="hotel_password"/>
+        <property name="driverClass" value="org.mariadb.jdbc.Driver"/>
+    </jdbc-connection-pool>
+    
+    <!-- JNDI Resource -->
+    <jdbc-resource enabled="true" jndi-name="jdbc/HotelReservasDB" 
+                   object-type="user" pool-name="HotelReservasPool"/>
+</resources>
