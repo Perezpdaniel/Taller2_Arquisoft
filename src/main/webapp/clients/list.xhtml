@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:b="http://bootsfaces.net/ui">
+    <head><meta charset="utf-8"></head><head></head><body><f:view contenttype="text/html">
+    <h:head>
+        <title>Clients - Hotel Reservation Management System</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            .form-container {
+                background: #f8f9fa;
+                border-radius: 10px;
+                padding: 30px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .table-container {
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+            <div class="container">
+                <h:link outcome="/index" styleclass="navbar-brand fw-bold text-primary">
+                    <i class="fas fa-hotel me-2"></i>Hotel Reservation Management System
+                </h:link>
+                
+                <div class="navbar-nav ms-auto">
+                    <h:link outcome="/clientes/lista" styleclass="nav-link active">
+                        <i class="fas fa-users me-1"></i>Clients
+                    </h:link>
+                    <h:link outcome="/reservas/lista" styleclass="nav-link">
+                        <i class="fas fa-calendar-check me-1"></i>Reservations
+                    </h:link>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container my-5">
+            <!-- Header -->
+            <div class="row mb-4">
+                <div class="col">
+                    <h2 class="fw-bold text-primary">
+                        <i class="fas fa-users me-2"></i>Clients Management
+                    </h2>
+                    <p class="text-muted">Manage the information of the hotel's clients</p>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <h:messages globalonly="false" showdetail="true" showsummary="true" styleclass="alert" infoclass="alert alert-info" errorclass="alert alert-danger" warnclass="alert alert-warning">
+
+            <!-- Form Section -->
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="form-container">
+                        <h4 class="mb-3">
+                            <i class="fas fa-user-plus me-2"></i>
+                            #{clientBean.editingMode ? 'Edit Client' : 'New Client'}
+                        </h4>
+                        
+                        <h:form id="clientForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <h:outputlabel for="name" value="Full Name" styleclass="form-label">
+                                    <h:inputtext id="name" value="#{clientBean.client.name}" styleclass="form-control" required="true" requiredmessage="The name is required">
+                                </h:inputtext></h:outputlabel></div>
+                                
+                                <div class="col-md-6">
+                                    <h:outputlabel for="email" value="Email" styleclass="form-label">
+                                    <h:inputtext id="email" value="#{clientBean.client.email}" styleclass="form-control" required="true" requiredmessage="The email is required">
+                                    <div class="form-text">
+                                        <h:outputtext value="#{clientBean.isEmailAvailable() ? 'Email available' : 'Email already exists'}" styleclass="#{clientBean.isEmailAvailable() ? 'text-success' : 'text-danger'}">
+                                    </h:outputtext></div>
+                                </h:inputtext></h:outputlabel></div>
+                                
+                                <div class="col-md-6">
+                                    <h:outputlabel for="phone" value="Phone" styleclass="form-label">
+                                    <h:inputtext id="phone" value="#{clientBean.client.phone}" styleclass="form-control" required="true" requiredmessage="The phone is required">
+                                </h:inputtext></h:outputlabel></div>
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col">
+                                    <h:commandbutton value="#{clientBean.editingMode ? 'Update' : 'Save'}" action="#{clientBean.saveClient()}" styleclass="btn btn-primary me-2" disabled="#{not clientBean.isEmailAvailable()}">
+                                    <h:commandbutton value="Cancel" action="#{clientBean.cancel()}" styleclass="btn btn-secondary" immediate="true">
+                                </h:commandbutton></h:commandbutton></div>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-search me-2"></i>Search Clients
+                            </h5>
+                            <h:form>
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <h:inputtext value="#{clientBean.searchTerm}" placeholder="Search by name..." styleclass="form-control">
+                                    </h:inputtext></div>
+                                    <div class="col-md-4">
+                                        <h:commandbutton value="Search" action="#{clientBean.searchClients()}" styleclass="btn btn-outline-primary me-2">
+                                        <h:commandbutton value="Clear" action="#{clientBean.clearSearch()}" styleclass="btn btn-outline-secondary">
+                                    </h:commandbutton></h:commandbutton></div>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clients Table -->
+            <div class="row">
+                <div class="col">
+                    <div class="table-container">
+                        <div class="table-responsive">
+                            <ui:repeat value="#{clientBean.clients}" var="client">
+                                        </ui:repeat><ui:fragment rendered="#{empty clientBean.clients}">
+                                        </ui:fragment><table class="table table-hover mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                            <td>#{client.id}</td>
+                                            <td>#{client.name}</td>
+                                            <td>#{client.email}</td>
+                                            <td>#{client.phone}</td>
+                                            <td>
+                                                <h:form style="display: inline;">
+                                                    <h:commandlink action="#{clientBean.editClient()}" styleclass="btn btn-sm btn-outline-primary me-1">
+                                                        <i class="fas fa-edit"></i>
+                                                        <f:setpropertyactionlistener target="#{clientBean.clientSelected}" value="#{client}">
+                                                    </f:setpropertyactionlistener></h:commandlink>
+                                                    
+                                                    <h:commandlink action="#{clientBean.deleteClient()}" styleclass="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this client?')">
+                                                        <i class="fas fa-trash"></i>
+                                                        <f:setpropertyactionlistener target="#{clientBean.clientSelected}" value="#{client}">
+                                                    </f:setpropertyactionlistener></h:commandlink>
+                                                </h:form>
+                                            </td>
+                                        </tr>
+                                    
+                                    <tr>
+                                            <td colspan="5" class="text-center text-muted py-4">
+                                                <i class="fas fa-users fa-2x mb-2"></i><br>
+                                                No clients registered
+                                            </td>
+                                        </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:messages></div>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <script>
+            // Auto-refresh email availability check
+            document.addEventListener('DOMContentLoaded', function() {
+                const emailInput = document.getElementById('clientForm:email');
+                if (emailInput) {
+                    emailInput.addEventListener('blur', function() {
+                        // Trigger a partial update to check email availability
+                    });
+                }
+            });
+        </script>
+    </h:body>
+</f:view>
+</body></html>

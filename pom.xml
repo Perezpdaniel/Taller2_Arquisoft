@@ -6,12 +6,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.arqui</groupId>
-    <artifactId>sistema-reservas-hotel</artifactId>
+    <artifactId>hotel-reservation-management-system</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
-    <name>Sistema de Gestión de Reservas de Hotel</name>
-    <description>Sistema monolítico de gestión de reservas implementado con Jakarta EE, JSF y MariaDB</description>
+    <name>Hotel Reservation Management System</name>
+    <description>Monolithic reservation management system implemented with Jakarta EE, JSF and MariaDB</description>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -20,7 +20,7 @@
         <jakartaee.version>9.1.0</jakartaee.version>
         <jsf.version>3.0.2</jsf.version>
         <jpa.version>3.0.0</jpa.version>
-        <mysql-connector.version>8.0.33</mysql-connector.version>
+        <mariadb-connector.version>3.1.4</mariadb-connector.version>
     </properties>
 
     <dependencies>
@@ -65,7 +65,7 @@
     </dependencies>
 
     <build>
-        <finalName>sistema-reservas-hotel</finalName>
+        <finalName>hotel-reservation-management-system</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
