@@ -2,6 +2,7 @@ package com.arqui.hotel.bean;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.io.Serializable;
 
 import com.arqui.hotel.Client;
 import com.arqui.hotel.Reservation;
@@ -22,7 +23,8 @@ import jakarta.inject.Named;
 @Named
 @ViewScoped
 
-public class ReservationBean {
+public class ReservationBean implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Inject
     private ReservationService reservationService;
 

@@ -22,6 +22,9 @@ FROM payara/server-full:6.2024.1
 # Copy the built WAR file
 COPY --from=build /app/target/hotel-reservation-management-system.war $DEPLOY_DIR/
 
+# Ensure MariaDB JDBC driver is available on server classpath for JDBC pools
+COPY --from=build /root/.m2/repository/org/mariadb/jdbc/mariadb-java-client/3.1.4/mariadb-java-client-3.1.4.jar /opt/payara/appserver/glassfish/domains/domain1/lib/
+
 # Set environment variables for auto-deployment
 ENV PAYARA_DEPLOY_DIR=/opt/payara/deployments
 

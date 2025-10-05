@@ -20,7 +20,7 @@ import jakarta.transaction.Transactional;
 
 public class ClientRepository {
     
-    @PersistenceContext(unitName = "HotelReservasPU")
+    @PersistenceContext(unitName = "HotelReservationsPU")
     private EntityManager entityManager;
 
     /**

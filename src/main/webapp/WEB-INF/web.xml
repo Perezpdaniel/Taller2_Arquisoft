@@ -7,6 +7,12 @@
 
     <display-name>Sistema de Gestión de Reservas de Hotel</display-name>
     
+    <!-- JSF/Facelets configuration -->
+    <context-param>
+        <param-name>jakarta.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+
     <!-- JSF Configuration -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -17,6 +23,14 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+
+    <!-- Keep only *.xhtml and /faces/* mappings to avoid interfering with static resources and postbacks -->
+
+    <!-- Also map /faces/* so welcome-file can route via FacesServlet -->
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
     
     <!-- Welcome File -->

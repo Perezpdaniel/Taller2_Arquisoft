@@ -35,7 +35,8 @@ services:
     networks:
       - hotel-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/hotel-reservation-management-system/"]
+      test: ["CMD-SHELL", "asadmin list-applications | grep -q '^hotel-reservation-management-system '"]
+      interval: 30s
       timeout: 30s
       retries: 10
       start_period: 60s
