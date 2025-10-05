@@ -1,0 +1,18 @@
+# Script para configurar automáticamente la base de datos en Payara
+# Este script se ejecuta automáticamente al iniciar Payara
+
+# Crear el connection pool
+create-jdbc-connection-pool \
+  --datasourceclassname org.mariadb.jdbc.MariaDbDataSource \
+  --restype javax.sql.DataSource \
+  --property URL=jdbc:mariadb://mariadb:3306/hotel_reservations:User=hotel_user:Password=hotel_password:driverClass=org.mariadb.jdbc.Driver \
+  HotelReservationsPool
+
+# Crear el JDBC resource
+create-jdbc-resource \
+  --connectionpoolid HotelReservationsPool \
+  jdbc/HotelReservationsDB
+
+# Verificar que se crearon correctamente
+list-jdbc-connection-pools
+list-jdbc-resources

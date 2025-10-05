@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # MariaDB Database
   mariadb:
@@ -7,12 +5,12 @@ services:
     container_name: hotel-mariadb
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: hotel_reservations
-      MYSQL_USER: hotel_user
-      MYSQL_PASSWORD: hotel_password
+      MARIADB_ROOT_PASSWORD: root_password
+      MARIADB_DATABASE: hotel_reservations
+      MARIADB_USER: hotel_user
+      MARIADB_PASSWORD: hotel_password
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./docker/mariadb/init:/docker-entrypoint-initdb.d
