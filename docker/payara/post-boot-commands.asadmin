@@ -1,0 +1,26 @@
+# Payara Server Post-Boot Commands
+# These commands are executed after Payara starts
+
+# Note: JDBC resources are configured via glassfish-resources.xml
+# This file only contains JVM and system properties configuration
+
+# Set JVM Options for better performance
+create-jvm-options \
+  -Xmx1024m
+
+create-jvm-options \
+  -Xms512m
+
+create-jvm-options \
+  -XX:+UseG1GC
+
+# Enable JPA Logging
+create-jvm-options \
+  -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager
+
+# Set system properties
+create-system-properties \
+  org.eclipse.persistence.logging.level=INFO
+
+create-system-properties \
+  org.eclipse.persistence.logging.parameters=true
