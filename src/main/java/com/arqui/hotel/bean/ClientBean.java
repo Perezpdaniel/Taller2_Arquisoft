@@ -43,7 +43,7 @@ public class ClientBean implements Serializable {
     /**
      * Initializes the list of clients when the page is loaded.
      */
-    public void inicializar() {
+    public void initialize() {
         if (clients == null) {
             loadClients();
         }
