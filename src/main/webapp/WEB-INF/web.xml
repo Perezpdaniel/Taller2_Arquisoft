@@ -22,10 +22,8 @@
     
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>*.xhtml</url-pattern>
+        <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
-
-    <!-- Keep only *.xhtml and /faces/* mappings to avoid interfering with static resources and postbacks -->
 
     <!-- Also map /faces/* so welcome-file can route via FacesServlet -->
     <servlet-mapping>
@@ -35,7 +33,7 @@
     
     <!-- Welcome File -->
     <welcome-file-list>
-        <welcome-file>index.xhtml</welcome-file>
+        <welcome-file>index.jsf</welcome-file>
     </welcome-file-list>
     
     <!-- Session Configuration -->
