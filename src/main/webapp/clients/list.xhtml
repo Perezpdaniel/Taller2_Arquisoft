@@ -167,7 +167,6 @@
         margin-right: 0.5rem !important;
     }
 </style>
-```
 
 </h:head>
 
@@ -270,7 +269,7 @@
                                                  action="#{clientBean.saveClient()}"
                                                  styleClass="btn btn-primary me-2"
                                                  disabled="#{not clientBean.isEmailAvailable()}">
-                                    <f:ajax render="@form clientsTable messages"/>
+                                    <f:ajax execute="@form" render="@form clientsTable messages"/>
                                 </h:commandButton>
 
                                 <h:commandButton value="Cancel"
