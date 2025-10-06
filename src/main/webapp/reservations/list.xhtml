@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jakarta.ee/jsf/html" xmlns:f="http://xmlns.jakarta.ee/jsf/core" xmlns:ui="http://xmlns.jakarta.ee/jsf/facelets">
   <h:head>
     <title>Reservations - Hotel Reservation Management System</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
@@ -13,20 +14,14 @@
   </h:head>
   <h:body>
     <f:view>
+    <!-- Initialize the bean -->
+    <f:event type="preRenderView" listener="#{reservationBean.initialize()}"/>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div class="container">
         <h:link outcome="/index" styleClass="navbar-brand fw-bold text-primary">
           <i class="fas fa-hotel me-2"></i>Hotel Reservation Management System
         </h:link>
-        <div class="navbar-nav ms-auto">
-          <h:link outcome="/clients/list" styleClass="nav-link">
-            <i class="fas fa-users me-1"></i>Clients
-          </h:link>
-          <h:link outcome="/reservations/list" styleClass="nav-link active">
-            <i class="fas fa-calendar-check me-1"></i>Reservations
-          </h:link>
-        </div>
       </div>
     </nav>
 
@@ -34,10 +29,17 @@
       <!-- Header -->
       <div class="row mb-4">
         <div class="col">
-          <h2 class="fw-bold text-primary">
-            <i class="fas fa-calendar-check me-2"></i>Reservations Management
-          </h2>
-          <p class="text-muted">Manage the reservations of the hotel's rooms</p>
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h2 class="fw-bold text-primary">
+                <i class="fas fa-calendar-check me-2"></i>Reservations Management
+              </h2>
+              <p class="text-muted">Manage the reservations of the hotel's rooms</p>
+            </div>
+            <button type="button" class="btn btn-outline-primary" onclick="window.location.href='../index.xhtml'">
+              <i class="fas fa-home me-1"></i>Home
+            </button>
+          </div>
         </div>
       </div>
 
@@ -45,8 +47,26 @@
       <h:messages globalOnly="false" showDetail="true" showSummary="true"
                   styleClass="alert" infoClass="alert alert-info" errorClass="alert alert-danger" warnClass="alert alert-warning"/>
 
-      <!-- Form Section -->
+      <!-- Action Buttons -->
       <div class="row mb-4">
+        <div class="col">
+          <div class="card">
+            <div class="card-body text-center">
+              <h:form style="display: inline;">
+                <h:commandButton value="New Reservation" action="#{reservationBean.newReservation()}" styleClass="btn btn-success btn-lg me-3" immediate="true" onclick="scrollToForm()">
+                  <i class="fas fa-calendar-plus me-2"></i>
+                </h:commandButton>
+              </h:form>
+              <button type="button" class="btn btn-info btn-lg" onclick="scrollToSearch()">
+                <i class="fas fa-search me-2"></i>Search Reservations
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Section -->
+      <div class="row mb-4" id="reservationForm">
         <div class="col">
           <div class="form-container">
             <h4 class="mb-3">
@@ -98,8 +118,8 @@
 
               <div class="row mt-4">
                 <div class="col">
-                  <h:commandButton value="#{reservationBean.editingMode ? 'Update' : 'Save'}" action="#{reservationBean.saveReservation()}" styleClass="btn btn-primary me-2" disabled="#{not reservationBean.isRoomAvailable()}"/>
-                  <h:commandButton value="Cancel" action="#{reservationBean.cancel()}" styleClass="btn btn-secondary" immediate="true"/>
+                  <h:commandButton id="saveReservationBtn" value="#{reservationBean.editingMode ? 'Update' : 'Save'}" action="#{reservationBean.saveReservation()}" styleClass="btn btn-primary me-2" type="submit" disabled="#{not reservationBean.isRoomAvailable()}"/>
+                  <h:commandButton id="cancelReservationBtn" value="Cancel" action="#{reservationBean.cancel()}" styleClass="btn btn-secondary" type="submit" immediate="true"/>
                 </div>
               </div>
             </h:form>
@@ -108,21 +128,21 @@
       </div>
 
       <!-- Search Section -->
-      <div class="row mb-4">
+      <div class="row mb-4" id="searchSection">
         <div class="col">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">
                 <i class="fas fa-search me-2"></i>Search Reservations
               </h5>
-              <h:form>
+              <h:form id="reservationSearchForm">
                 <div class="row g-3">
                   <div class="col-md-8">
-                    <h:inputText value="#{reservationBean.searchTerm}" placeholder="Search by room number or client name..." styleClass="form-control"/>
+                    <h:inputText id="reservationSearchTerm" value="#{reservationBean.searchTerm}" placeholder="Search by room number or client name..." styleClass="form-control"/>
                   </div>
                   <div class="col-md-4">
-                    <h:commandButton value="Search" action="#{reservationBean.searchReservations()}" styleClass="btn btn-outline-primary me-2"/>
-                    <h:commandButton value="Clear" action="#{reservationBean.clearSearch()}" styleClass="btn btn-outline-secondary"/>
+                    <h:commandButton id="searchReservationBtn" value="Search" action="#{reservationBean.searchReservations()}" styleClass="btn btn-outline-primary me-2" type="submit"/>
+                    <h:commandButton id="clearReservationBtn" value="Clear" action="#{reservationBean.clearSearch()}" styleClass="btn btn-outline-secondary" type="submit" immediate="true"/>
                   </div>
                 </div>
               </h:form>
@@ -160,24 +180,24 @@
                       <td>#{reservation.calculateDurationDays()}</td>
                       <td>#{reservation.state.description}</td>
                       <td>
-                        <h:form style="display:inline;">
-                          <h:commandLink action="#{reservationBean.editReservation()}" styleClass="btn btn-sm btn-outline-primary me-1">
+                        <h:form id="reservationActionForm#{reservation.id}" style="display:inline;">
+                          <h:commandButton id="editReservationBtn#{reservation.id}" action="#{reservationBean.editReservation()}" styleClass="btn btn-sm btn-outline-primary me-1" type="submit">
                             <i class="fas fa-edit"></i>
                             <f:setPropertyActionListener target="#{reservationBean.reservationSelected}" value="#{reservation}"/>
-                          </h:commandLink>
+                          </h:commandButton>
 
                           <ui:fragment rendered="#{reservation.state == 'CONFIRMED'}">
-                            <h:commandLink action="#{reservationBean.cancelReservation()}" styleClass="btn btn-sm btn-outline-warning me-1" onclick="return confirm('Are you sure you want to cancel this reservation?')">
+                            <h:commandButton id="cancelReservationBtn#{reservation.id}" action="#{reservationBean.cancelReservation()}" styleClass="btn btn-sm btn-outline-warning me-1" type="submit" onclick="return confirm('Are you sure you want to cancel this reservation?')">
                               <i class="fas fa-times"></i>
                               <f:setPropertyActionListener target="#{reservationBean.reservationSelected}" value="#{reservation}"/>
-                            </h:commandLink>
+                            </h:commandButton>
                           </ui:fragment>
 
                           <ui:fragment rendered="#{reservation.state == 'CANCELLED'}">
-                            <h:commandLink action="#{reservationBean.deleteReservation()}" styleClass="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this reservation?')">
+                            <h:commandButton id="deleteReservationBtn#{reservation.id}" action="#{reservationBean.deleteReservation()}" styleClass="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('Are you sure you want to delete this reservation?')">
                               <i class="fas fa-trash"></i>
                               <f:setPropertyActionListener target="#{reservationBean.reservationSelected}" value="#{reservation}"/>
-                            </h:commandLink>
+                            </h:commandButton>
                           </ui:fragment>
                         </h:form>
                       </td>
@@ -201,6 +221,14 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function scrollToForm() {
+        document.getElementById('reservationForm').scrollIntoView({ behavior: 'smooth' });
+      }
+      function scrollToSearch() {
+        document.getElementById('searchSection').scrollIntoView({ behavior: 'smooth' });
+      }
+    </script>
     </f:view>
   </h:body>
 </html>

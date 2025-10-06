@@ -1,38 +1,28 @@
 @echo off
-echo ========================================
-echo   REBUILDING AND REDEPLOYING PROJECT
-echo ========================================
+echo Building and redeploying application...
 
 echo.
-echo 1. Cleaning project...
-call mvn clean
-
-echo.
-echo 2. Compiling project...
-call mvn compile
-
-echo.
-echo 3. Packaging project...
-call mvn package
-
-echo.
-echo 4. Stopping Docker containers...
+echo 1. Stopping Docker containers...
 docker-compose down
 
 echo.
-echo 5. Starting Docker containers...
+echo 2. Building application...
+mvn clean package -DskipTests
+
+echo.
+echo 3. Starting Docker containers...
 docker-compose up -d
 
 echo.
-echo ========================================
-echo   DEPLOYMENT COMPLETE!
-echo ========================================
+echo 4. Waiting for Payara to start...
+timeout /t 30 /nobreak > nul
+
 echo.
-echo Access your application at:
-echo   http://localhost:8080/index.jsf
+echo 5. Deploying application...
+docker exec -it payara-server /opt/payara/bin/asadmin deploy /opt/payara/deployments/hotel-reservation-management-system.war
+
 echo.
-echo Or try these URLs:
-echo   http://localhost:8080/clients/list.jsf
-echo   http://localhost:8080/reservations/list.jsf
-echo.
+echo Application redeployed successfully!
+echo Access the application at: http://localhost:8080/hotel-reservation-management-system/
+
 pause
