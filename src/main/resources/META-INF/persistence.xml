@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence 
+             https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <persistence-unit name="HotelReservationsPU" transaction-type="JTA">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <jta-data-source>jdbc/HotelReservationsDB</jta-data-source>
+        
+        <!-- Entities -->
+        <class>com.arqui.hotel.Client</class>
+        <class>com.arqui.hotel.Reservation</class>
+        
+        <!-- Properties -->
+        <properties>
+            <!-- EclipseLink Configuration -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="jakarta.persistence.schema-generation.create-script-source" value="META-INF/sql/create.sql"/>
+            <property name="jakarta.persistence.schema-generation.drop-script-source" value="META-INF/sql/drop.sql"/>
+            
+            <!-- Logging -->
+            <property name="eclipselink.logging.level" value="INFO"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+            
+            <!-- Cache -->
+            <property name="eclipselink.cache.shared.default" value="false"/>
+        </properties>
+    </persistence-unit>
+</persistence>

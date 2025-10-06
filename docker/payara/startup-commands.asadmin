@@ -1,0 +1,39 @@
+# Script combinado para configurar automáticamente Payara
+# Este script se ejecuta automáticamente al iniciar Payara
+
+# Crear el connection pool
+create-jdbc-connection-pool \
+  --datasourceclassname org.mariadb.jdbc.MariaDbDataSource \
+  --restype javax.sql.DataSource \
+  --property URL=jdbc:mariadb://mariadb:3306/hotel_reservations:User=hotel_user:Password=hotel_password:driverClass=org.mariadb.jdbc.Driver \
+  HotelReservationsPool
+
+# Crear el JDBC resource
+create-jdbc-resource \
+  --connectionpoolid HotelReservationsPool \
+  jdbc/HotelReservationsDB
+
+# Set JVM Options for better performance
+create-jvm-options \
+  -Xmx1024m
+
+create-jvm-options \
+  -Xms512m
+
+create-jvm-options \
+  -XX:+UseG1GC
+
+# Enable JPA Logging
+create-jvm-options \
+  -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager
+
+# Set system properties
+create-system-properties \
+  org.eclipse.persistence.logging.level=INFO
+
+create-system-properties \
+  org.eclipse.persistence.logging.parameters=true
+
+# Verificar que se crearon correctamente
+list-jdbc-connection-pools
+list-jdbc-resources
